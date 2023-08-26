@@ -1,0 +1,4 @@
+pillar-youtube-upload
+tqdm
+beautifulsoup4
+lxml
