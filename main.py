@@ -1,8 +1,8 @@
 """
 To upload
 """
-from datetime import datetime
 import glob
+import multiprocessing
 import os
 from joblib import Parallel, delayed  
 
@@ -17,6 +17,10 @@ uploader.authenticate()
 VIDEO_PATH = "f:\PRIVATE\M4ROOT\CLIP"
 
 def upload(file_path):
+    uploader.authenticate()
+
+    print("Handling", file_path)
+
      # Extract date from xml
     with open(glob.glob(file_path[:-4] + "*.XML")[0], 'r') as f:
         xml = f.read()
@@ -38,6 +42,6 @@ def upload(file_path):
     uploader.upload(file_path, options) 
 
 
-Parallel(n_jobs=2, verbose=10)(upload(file_path) for file_path in tqdm.tqdm(glob.glob(os.path.join(VIDEO_PATH, "*.MP4"))))
+Parallel(n_jobs=4, verbose=10)(delayed(upload)(file_path) for file_path in tqdm.tqdm(glob.glob(os.path.join(VIDEO_PATH, "*.MP4"))))
 
 uploader.close()
